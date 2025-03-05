@@ -98,13 +98,13 @@
 	    <repository>
 	      <id>nexus</id>
 	      <name>KK FUNDA Releases Nexus Repository</name>
-	      <url>http://54.226.10.103:8081/repository/naren-release</url>
+	      <url>http://107.23.183.136:8081/repository/naren-release/</url>
 	    </repository>
 	    
 	    <snapshotRepository>
 	      <id>nexus</id>
 	      <name>KK FUNDA Snapshot Nexus Repository </name>
-	      <url>http://54.226.10.103:8081/repository/naren-snapshot/</url>
+	      <url>http://107.23.183.136:8081/repository/naren-snapshot/</url>
 	    </snapshotRepository>
 	    
 	</distributionManagement>
