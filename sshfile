@@ -7,8 +7,8 @@ pipeline {
     stages {
         stage('Checkout Stage') {
             steps {
-              notifyBuild('STARTED')
-              git branch: 'development', credentialsId: '1befd86c-a774-4fb5-aba9-75f13e27d41f', url: 'https://github.com/bbnp1978/maven-web-app-project-kk-funda.git'  
+                notifyBuild('STARTED')
+                git branch: 'development', credentialsId: 'e7c9e91f-503e-42dc-a754-2f3fd7ff3824', url: 'https://github.com/bbnp1978/maven-web-app-project-kk-funda.git'
             }
         }
        
@@ -29,20 +29,11 @@ pipeline {
                 sh "mvn deploy"
             }
         }
-
-        stage('Deploy to Tomcat') {
+       
+        stage('Deploy to EC2') {
             steps {
-                script {
-                    sshagent(['sshkey']) {
-                        // Stop Tomcat service gracefully
-                        sh "ssh -o StrictHostKeyChecking=no ec2-user@54.205.114.168 'sudo /opt/tomcat/bin/shutdown.sh'"
-
-                        // Deploy WAR file to Tomcat
-                        sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@54.205.114.168:/opt/tomcat/webapps/"
-
-                        // Start Tomcat service
-                        sh "ssh -o StrictHostKeyChecking=no ec2-user@54.205.114.168 'sudo /opt/tomcat/bin/startup.sh'"
-                    }
+                sshagent(['ssh-key']) {
+                    sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@54.205.114.168:/opt/tomcat/webapps/"
                 }
             }
         }
@@ -62,7 +53,7 @@ pipeline {
     }
 } // Pipeline closing
 
-// ✅ Fixed Notification Function
+// Notification Function
 void notifyBuild(String buildStatus) {
     buildStatus = buildStatus ?: 'SUCCESS'
 
@@ -80,10 +71,11 @@ void notifyBuild(String buildStatus) {
     }
 
     // List of Slack channels to notify
-    def slackChannels = ['#babudeclarative', '#babu']
+    def slackChannels = ['hello', '#sla']
 
     // Send notifications to all channels
     for (channel in slackChannels) {
         slackSend(color: colorCode, message: summary, channel: channel)
+    }
 }
-}
+
