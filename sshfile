@@ -1,0 +1,89 @@
+pipeline {
+    agent any
+    tools {
+        maven "maven"
+    }
+
+    stages {
+        stage('Checkout Stage') {
+            steps {
+              notifyBuild('STARTED')
+              git branch: 'development', credentialsId: '1befd86c-a774-4fb5-aba9-75f13e27d41f', url: 'https://github.com/bbnp1978/maven-web-app-project-kk-funda.git'  
+            }
+        }
+       
+        stage('Build') {
+            steps {
+                sh "mvn clean package"
+            }
+        }
+       
+        stage('SQREPORT') {
+            steps {
+                sh "mvn sonar:sonar"
+            }
+        }
+       
+        stage('Deploy to Nexus') {
+            steps {
+                sh "mvn deploy"
+            }
+        }
+
+        stage('Deploy to Tomcat') {
+            steps {
+                script {
+                    sshagent(['sshkey']) {
+                        // Stop Tomcat service gracefully
+                        sh "ssh -o StrictHostKeyChecking=no ec2-user@54.205.114.168 'sudo /opt/tomcat/bin/shutdown.sh'"
+
+                        // Deploy WAR file to Tomcat
+                        sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@54.205.114.168:/opt/tomcat/webapps/"
+
+                        // Start Tomcat service
+                        sh "ssh -o StrictHostKeyChecking=no ec2-user@54.205.114.168 'sudo /opt/tomcat/bin/startup.sh'"
+                    }
+                }
+            }
+        }
+    } // Stages closing
+
+    post {
+        success {
+            script {
+                notifyBuild(currentBuild.result)
+            }
+        }
+        failure {
+            script {
+                notifyBuild(currentBuild.result)
+            }
+        }
+    }
+} // Pipeline closing
+
+// ✅ Fixed Notification Function
+void notifyBuild(String buildStatus) {
+    buildStatus = buildStatus ?: 'SUCCESS'
+
+    def colorName = 'RED'
+    def colorCode = '#FF0000'
+    def subject = "${buildStatus}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'"
+    def summary = "${subject} (${env.BUILD_URL})"
+
+    if (buildStatus == 'STARTED') {
+        colorName = 'YELLOW'
+        colorCode = '#FFFF00'
+    } else if (buildStatus == 'SUCCESS') {
+        colorName = 'GREEN'
+        colorCode = '#00FF00'
+    }
+
+    // List of Slack channels to notify
+    def slackChannels = ['#babudeclarative', '#babu']
+
+    // Send notifications to all channels
+    for (channel in slackChannels) {
+        slackSend(color: colorCode, message: summary, channel: channel)
+}
+}
