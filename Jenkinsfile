@@ -35,7 +35,7 @@ tools
         sh """
             curl -u kkfunda:kkfunda \
             --upload-file /var/lib/jenkins/workspace/DeclarativePipeline/target/maven-web-application.war \
-              "http://34.201.82.172:9000/manager/text/deploy?path=/maven-web-application&update=true"
+              "http://54.205.114.168:8080/manager/text/deploy?path=/maven-web-application&update=true"
            """
          
           }
