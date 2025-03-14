@@ -9,7 +9,7 @@
 </head>
 </head>
 <body>
-<h1 align="center">Welcome to Krushi</h1>
+<h1 align="center">Welcome to bbnp1980Devops</h1>
 <h1 align="center">I am from Guntur</h1>
 <hr>
 <br>
