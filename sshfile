@@ -8,7 +8,7 @@ pipeline {
         stage('Checkout Stage') {
             steps {
                 notifyBuild('STARTED')
-                git branch: 'development', credentialsId: 'e7c9e91f-503e-42dc-a754-2f3fd7ff3824', url: 'https://github.com/bbnp1978/maven-web-app-project-kk-funda.git'
+                git branch: 'prod', credentialsId: 'e7c9e91f-503e-42dc-a754-2f3fd7ff3824', url: 'https://github.com/bbnp1978/maven-web-app-project-kk-funda.git'
             }
         }
        
