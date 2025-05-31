@@ -9,8 +9,8 @@
 </head>
 </head>
 <body>
-<h1 align="center">I am from Sydney</h1>
-<h1 align="center">I am from vizag</h1>
+<h1 align="center">I am from Brizbane</h1>
+<h1 align="center">I am from Chpet</h1>
 <hr>
 <br>
 	<h1><h3> Server Side IP Address </h3><br>
