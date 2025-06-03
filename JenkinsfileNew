@@ -34,7 +34,7 @@ tools
 
         sh """
             curl -u kkfunda:admin123 \
-            --upload-file /var/lib/jenkins/workspace/MultiBranch-jio/target/maven-web-application.war \
+            --upload-file /var/lib/jenkins/workspace/MultiBranch-jio-development/target/maven-web-application.war \
               "http://54.226.120.22:9090/manager/text/deploy?path=/maven-web-application&update=true"
            """
          
