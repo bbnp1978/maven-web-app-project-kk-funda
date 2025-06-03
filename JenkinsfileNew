@@ -33,9 +33,9 @@ tools
 		echo "Deploying WAR file using curl..."
 
         sh """
-            curl -u kkfunda:kkfunda \
-            --upload-file /var/lib/jenkins/workspace/MB-Pipeline_development/target/maven-web-application.war \
-              "http://54.205.114.168:8080/manager/text/deploy?path=/maven-web-application&update=true"
+            curl -u kkfunda:admin123 \
+            --upload-file /var/lib/jenkins/workspace/MultiBranch-jio/target/maven-web-application.war \
+              "http://54.226.120.22:9090/manager/text/deploy?path=/maven-web-application&update=true"
            """
          
           }
@@ -76,5 +76,5 @@ def notifyBuild(String buildStatus = 'STARTED') {
   }
 
   // Send notifications
-  slackSend (color: colorCode, message: summary, channel: '#babudeclarative')
+  slackSend (color: colorCode, message: summary, channel: '#jio-dev-1')
 }
